@@ -55,3 +55,9 @@ npx expo start
 iOS Simulator
 Android Emulator
 Expo Go app (scan QR code)
+
+![758301A6-2FB3-4![87DE1619-482E-4816-9074-4BDA37D6A667_4_5005_c](https://github.com/user-attachments/assets/5d589096-d941-43bb-bf9a-b92b366cf34d)
+02D-A4ED-D3824E2EC7E8_4_5005_c](https://github.com/user-attachments/assets/85ad8c66-1f19-4947-a8dd-2852fbe5e76f)
+![D3992591-218F-4DA8-97C7-3F2FCFFDA7BC_4_5005_c](https://github.com/user-attachments/assets/92c41392-83a4-43b2-bb90-b1c27b123b25)
+
+
