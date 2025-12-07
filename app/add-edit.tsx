@@ -6,9 +6,7 @@ import { useLocalSearchParams, router } from "expo-router";
 export default function AddEditEventScreen() {
   const { id } = useLocalSearchParams();
   const { events, addEvent, updateEvent } = useContext(EventsContext);
-
-  const existingEvent = events.find((e) => e.id === id);
-
+  const existingEvent = events.find((e: any) => e.id === id);
   const [title, setTitle] = useState(existingEvent?.title || "");
   const [type, setType] = useState(existingEvent?.type || "");
   const [severity, setSeverity] = useState(existingEvent?.severity || "Low");
@@ -39,21 +37,43 @@ export default function AddEditEventScreen() {
         onChangeText={setTitle}
       />
 
-      <Text style={styles.label}>Event Type</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="e.g., Phishing Email, Login Alert"
-        value={type}
-        onChangeText={setType}
-      />
+      {/* Event Type Dropdown */}
+<Text style={styles.label}>Event Type</Text>
+<TouchableOpacity
+  style={styles.dropdown}
+  onPress={() => setShowTypeOptions((prev) => !prev)}
+>
+  <Text style={styles.dropdownText}>{type || "Select Event Type"}</Text>
+</TouchableOpacity>
 
-      <Text style={styles.label}>Severity</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Low, Medium, High"
-        value={severity}
-        onChangeText={setSeverity}
-      />
+{showTypeOptions && (
+  <View style={styles.dropdownMenu}>
+    {[
+      "Phishing Attempt",
+      "Login Alert",
+      "MFA Alert",
+      "Device Activity",
+      "Password Reset",
+      "Network Alert",
+      "System Update",
+      "Other",
+    ].map((option) => (
+      <TouchableOpacity
+        key={option}
+        style={styles.dropdownItem}
+        onPress={() => {
+          setType(option);
+          setShowTypeOptions(false);
+        }}
+      >
+        <Text style={styles.dropdownItemText}>{option}</Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+)}
+
+{/* Severity Dropdown*
+
 
       <Text style={styles.label}>Description</Text>
       <TextInput
