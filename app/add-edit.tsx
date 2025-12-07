@@ -8,6 +8,8 @@ export default function AddEditEventScreen() {
   const { events, addEvent, updateEvent } = useContext(EventsContext);
   const existingEvent = events.find((e: any) => e.id === id);
   const [title, setTitle] = useState(existingEvent?.title || "");
+  const [showTypeOptions, setShowTypeOptions] = useState(false);
+  const [showSeverityOptions, setShowSeverityOptions] = useState(false);
   const [type, setType] = useState(existingEvent?.type || "");
   const [severity, setSeverity] = useState(existingEvent?.severity || "Low");
   const [description, setDescription] = useState(existingEvent?.description || "");
@@ -111,5 +113,35 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 24,
   },
+  dropdown: {
+  backgroundColor: "white",
+  borderWidth: 1,
+  borderColor: "#d1d5db",
+  padding: 12,
+  borderRadius: 8,
+  marginBottom: 6,
+},
+dropdownText: {
+  fontSize: 16,
+  color: "#374151",
+},
+dropdownMenu: {
+  backgroundColor: "white",
+  borderWidth: 1,
+  borderColor: "#d1d5db",
+  borderRadius: 8,
+  marginBottom: 12,
+},
+dropdownItem: {
+  paddingVertical: 10,
+  paddingHorizontal: 14,
+  borderBottomWidth: 1,
+  borderBottomColor: "#e5e7eb",
+},
+dropdownItemText: {
+  fontSize: 16,
+  color: "#111827",
+},
+
   saveText: { color: "white", textAlign: "center", fontWeight: "700", fontSize: 16 },
 });
