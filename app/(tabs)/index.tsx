@@ -3,17 +3,32 @@ import { useContext, useState, useMemo } from "react";
 import { EventsContext } from "../../context/EventsContext";
 import { router } from "expo-router";
 import { EventItem } from "../../components/EventItem";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
 
 export default function HomeScreen() {
   const { events } = useContext(EventsContext);
   const [search, setSearch] = useState("");
   const [severityFilter, setSeverityFilter] = useState("All");
 
+  // Export logs to JSON file
+  const handleExport = async () => {
+    try {
+      const json = JSON.stringify(events, null, 2); // prettified JSON
+      const fileUri = (FileSystem as any).documentDirectory + "seculog_export.json";
+
+      await FileSystem.writeAsStringAsync(fileUri, json);
+      await Sharing.shareAsync(fileUri);
+    } catch (error) {
+      console.error("Export failed:", error);
+    }
+  };
+
   // Sorting + filtering logic
   const filteredEvents = useMemo(() => {
     let data = [...events];
 
-    // Sort newest -> oldest
+    // Sort newest first
     data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     // Filter by severity
@@ -81,10 +96,19 @@ export default function HomeScreen() {
               onPress={() => router.push(`/details?id=${item.id}`)}
             />
           )}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 120 }}
         />
       )}
 
+      {/* Export Button */}
+      <TouchableOpacity
+        style={styles.exportButton}
+        onPress={handleExport}
+      >
+        <Text style={styles.exportText}>📤 Export Logs</Text>
+      </TouchableOpacity>
+
+      {/* Add Event Button */}
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => router.push("/add-edit")}
@@ -98,6 +122,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f9fafb" },
   heading: { fontSize: 28, fontWeight: "700", marginBottom: 12 },
+
   search: {
     backgroundColor: "white",
     padding: 10,
@@ -106,7 +131,9 @@ const styles = StyleSheet.create({
     borderColor: "#d1d5db",
     marginBottom: 10,
   },
+
   filters: { flexDirection: "row", marginBottom: 12 },
+
   filterButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -119,9 +146,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#2563eb",
     borderColor: "#2563eb",
   },
+
   filterText: { color: "#374151" },
   filterTextActive: { color: "white", fontWeight: "600" },
+
   empty: { marginTop: 20, color: "#6b7280", fontSize: 16 },
+
   addButton: {
     position: "absolute",
     bottom: 30,
@@ -132,4 +162,19 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   addText: { color: "white", fontSize: 16, fontWeight: "600" },
+
+  exportButton: {
+    position: "absolute",
+    bottom: 90,
+    right: 20,
+    backgroundColor: "#4b5563",
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 24,
+  },
+  exportText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+  },
 });
