@@ -4,6 +4,7 @@ import { EventsContext } from "../../context/EventsContext";
 import { router } from "expo-router";
 import { EventItem } from "../../components/EventItem";
 
+
 export default function HomeScreen() {
   const { events } = useContext(EventsContext);
 
